@@ -1,0 +1,32 @@
+{
+    "name": "hls-url-finder",
+    "version": "1.0.0",
+    "description": "find hls-url in UTIS(Korean CCTV) homepage",
+    "manifest_version": 3,
+    "permissions" : [
+        "tabs",
+        "declarativeContent",
+        "contextMenus",
+        "downloads",
+        "webRequest",
+        "storage",
+        "webNavigation"
+    ],
+    "host_permissions": [
+         "<all_urls>"
+    ],
+    "background" : {
+        "service_worker" : "background.js"
+    },
+    "content_scripts": [
+        {
+          "matches": ["http://www.utic.go.kr/*"],
+          "run_at": "document_idle",
+          "js": ["content.js"]
+        }
+    ],
+    "web_accessible_resources": [{
+        "resources": ["inject.js"],
+        "matches": ["<all_urls>"]
+    }]
+  }
