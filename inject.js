@@ -25,11 +25,29 @@ const attachFindButton = (cctvLink) => {
     console.log('### attached button:', cctvLink.innerHTML);
 };
 
-if(typeof initLoading === 'undefined'){
-    const initLoading = async () => {
+const attachCheckAllButton = () => {
+    const button = document.createElement('button');
+    button.innerText = 'Run All';
+    button.style.position = 'fixed';
+    button.style.top = '20px';
+    button.style.right = '20px';
+    button.onclick = () => {
         const links = document.links;
         const linksArray = Object.values(links);
         const allCCTVLinks = linksArray.filter(link => link.href.startsWith('javascript:test'))
+        runAll(allCCTVLinks);
+
+    }
+    document.body.appendChild(button);
+
+}
+
+if(typeof initLoading === 'undefined'){
+    const initLoading = async () => {
+        attachCheckAllButton();
+        // const links = document.links;
+        // const linksArray = Object.values(links);
+        // const allCCTVLinks = linksArray.filter(link => link.href.startsWith('javascript:test'))
         // clickAllLinks(cctvLinks, 3000);
         // for(let cctvLink of cctvLinks){
         //     attachFindButton(cctvLink);

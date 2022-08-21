@@ -26,7 +26,7 @@ const clickHandler = event => {
         }
         const newCapturedElement = document.createElement('div');
         newCapturedElement.id = 'captured';
-        newCapturedElement.innerHTML = `[${cctvId}][${url}]`;
+        newCapturedElement.innerHTML = `[${cctvId}] ${url} `;
         newCapturedElement.style.width = '600px';
         newCapturedElement.style.overflow = 'hidden';
         newCapturedElement.style.textOverflow = 'ellipsis';
@@ -64,6 +64,13 @@ const main = () => {
         initLoading()
     }
 }
+
+const s = document.createElement('script');
+s.src = chrome.runtime.getURL('inject.js');
+s.onload = function() {
+    this.remove();
+};
+(document.head || document.documentElement).appendChild(s);
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
