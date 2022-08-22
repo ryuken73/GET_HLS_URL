@@ -7,6 +7,18 @@ const handlers = {
     'alive': handleAliveMessage
 }
 
+const handleDragStart = event => {
+    event.target.style.opacity = '0.4';
+    // event.dataTransfer.effectAllowed = 'move';
+    const title = event.target.parentElement.querySelector('a').innerText;
+    const url = event.target.parentElement.querySelector('#captured').getAttribute('streamUrl');
+    const cctvId = event.target.parentElement.querySelector('#captured').getAttribute('cctvId');
+    event.dataTransfer.setData('application/json', JSON.stringify({cctvId, title, url}));
+}
+const handleDragEnd = event => {
+    event.target.style.opacity = '1';
+}
+
 const clickHandler = event => {
     console.log('href clicked:', event);
     const targetElement = event.target;
@@ -21,19 +33,36 @@ const clickHandler = event => {
         const targetRowElement = targetElement.parentElement.parentElement;
         const capturedElement = targetRowElement.querySelector('#captured');
         if(capturedElement){
+            capturedElement.setAttribute('cctvId', cctvId);
+            capturedElement.setAttribute('streamUrl', url);
             capturedElement.innerHTML = `[${cctvId}] ${url} `;
             return
         }
         const newCapturedElement = document.createElement('div');
         newCapturedElement.id = 'captured';
+        newCapturedElement.setAttribute('cctvId', cctvId);
+        newCapturedElement.setAttribute('streamUrl', url);
         newCapturedElement.innerHTML = `[${cctvId}] ${url} `;
         newCapturedElement.style.width = '600px';
         newCapturedElement.style.overflow = 'hidden';
         newCapturedElement.style.textOverflow = 'ellipsis';
         newCapturedElement.style.whiteSpace = 'nowrap';
         newCapturedElement.style.fontSize = '12px';
+        newCapturedElement.style.display = 'inline';
+        const dragDiv = document.createElement('div');
+        dragDiv.innerHTML = "DRAG";
+        dragDiv.style.cursor = 'move';
+        dragDiv.style.fontSize = '10px';
+        dragDiv.style.display = 'inline';
+        dragDiv.style.background = 'maroon';
+        dragDiv.style.color = 'white';
+        dragDiv.style.padding = '3px';
+        dragDiv.setAttribute('draggable', true);
+        dragDiv.addEventListener('dragstart', handleDragStart);
+        dragDiv.addEventListener('dragend', handleDragEnd);
 
         targetRowElement.appendChild(newCapturedElement);
+        targetRowElement.appendChild(dragDiv);
     })
 }
 
